@@ -1,0 +1,10 @@
+- name: install redmine
+  hosts: ubuntu
+  tasks:
+    - name: install Ruby
+      become: yes
+      apt:
+        name:
+          - ruby
+          - ruby-dev
+          - bundler
