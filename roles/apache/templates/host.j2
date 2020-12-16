@@ -1,0 +1,8 @@
+<VirtualHost *:80>
+ ServerName {{ common.url }}
+ DocumentRoot {{common.project_dir}}/redmine/public
+ <Directory {{common.project_dir}}/redmine/public>
+   AllowOverride all
+   Options -MultiViews
+ </Directory>
+</VirtualHost>

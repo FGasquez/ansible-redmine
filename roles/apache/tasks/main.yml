@@ -1,0 +1,25 @@
+- name: Add {{ guest.user }} to www-data group
+  become: yes
+  user: 
+    name: "{{ guest.user }}"
+    groups: www-data
+
+- name: apache | disable default site
+  become: yes
+  command: a2dissite 000-default
+
+- name: Setup site
+  become: yes
+  template: 
+    src: host.j2 
+    dest: "/etc/apache2/sites-available/{{ common.url }}.conf"
+
+- name: apache | enable site
+  become: yes
+  command: a2ensite {{ common.url }}
+
+- name: Restar apache
+  become: yes
+  service: 
+    name: apache2
+    state: restarted
