@@ -1,0 +1,56 @@
+- name: download redmine
+  get_url: 
+    url: "{{ redmine.url }}/redmine-{{redmine.version}}.zip" 
+    dest: "/tmp/redmine-{{ redmine.version }}.zip"
+
+- name: Extract redmine
+  become: yes
+  shell: "unzip /tmp/redmine-{{ redmine.version }}.zip -d {{ common.project_dir }}"
+
+- name: Remove old redmine folder
+  become: yes
+  file:
+    state: absent
+    path: "{{ common.project_dir }}/redmine"
+
+- name: Rename folder
+  become: yes
+  command: "mv {{ common.project_dir }}/redmine-{{ redmine.version }} {{ common.project_dir }}/redmine"
+
+- name: Change owner to {{ guest.user }}
+  become: yes
+  file: dest={{ common.project_dir }}/redmine owner={{ guest.user }} recurse=yes
+
+- name: Install Bundler
+  become: yes
+  command: bash -lc "gem install bundler"
+
+- name: Install mysql2 gem
+  gem:
+    name: mysql2
+    state: latest
+
+- name: Install dependencies
+  community.general.bundler:
+    state: present
+    gemfile: "{{ common.project_dir }}/redmine/Gemfile"
+
+- name: Copy database config
+  template: 
+    src: database.yml.j2
+    dest: "{{ common.project_dir }}/redmine/config/database.yml"
+
+- name: Generate secret token
+  shell: "rake generate_secret_token"
+  args:
+    chdir: "{{ common.project_dir }}/redmine"
+
+- name: Migrate Databases
+  shell: "bundle exec rake db:migrate RAILS_ENV=production"
+  args:
+    chdir: "{{ common.project_dir }}/redmine"
+
+- name: Generate default config
+  shell: "bundle exec rake redmine:load_default_data RAILS_ENV=production"
+  args:
+    chdir: "{{ common.project_dir }}/redmine"
