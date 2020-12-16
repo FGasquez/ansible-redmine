@@ -1,10 +1,9 @@
 - name: install redmine
   hosts: ubuntu
-  tasks:
-    - name: install Ruby
-      become: yes
-      apt:
-        name:
-          - ruby
-          - ruby-dev
-          - bundler
+  vars_files:
+    - vars/all.yml
+  roles:
+    - system
+    - mysql
+    - redmine
+    - apache
