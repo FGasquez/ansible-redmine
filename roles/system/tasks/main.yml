@@ -1,0 +1,25 @@
+- name: Update apt
+  become: yes
+  apt:
+    update_cache: yes
+
+- name: install deps
+  become: yes
+  apt:
+    name:
+      - libssl-dev
+      - mysql-server
+      - python-mysqldb
+      - ruby-full
+      - dirmngr
+      - gnupg 
+      - apt-transport-https
+      - ca-certificates
+      - build-essential
+      - libmysqlclient-dev
+      - imagemagick
+      - libmagickwand-dev
+      - apache2
+      - libapache2-mod-passenger
+      - python3-pip
+    state: present
