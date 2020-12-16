@@ -1,0 +1,16 @@
+common:
+  project_dir: /usr/local/share
+  url: redmine.example.com
+
+guest:
+  user: vagrant
+
+redmine: 
+  url: https://www.redmine.org/releases/
+  version: 4.1.1
+
+mysql:
+  root_password: S3cr37P4ssw0rd
+  user: redmine
+  password: Ch4ng3M3!!
+  dbname: redmine
