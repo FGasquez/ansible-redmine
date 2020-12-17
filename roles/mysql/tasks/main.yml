@@ -27,7 +27,8 @@
     password: "{{ mysql.root_password }}"
     state: present
 
-- name: mysql | restart service
+- name: Restart mysql service
+  become: yes
   service: 
     name: mysql 
     state: restarted
