@@ -1,0 +1,16 @@
+
+server {
+    listen 80;
+    listen 443 ssl;
+    server_name "{{ common.url }}";
+
+    root "{{ common.project_dir }}/redmine/public";
+
+    # log files
+    access_log "/var/log/nginx/{{ common.url }}.access.log";
+    error_log "/var/log/nginx/{{ common.url }}.error.log";
+    
+    passenger_enabled on;
+    passenger_min_instances 1;
+    client_max_body_size 10m;
+}
