@@ -1,13 +1,14 @@
-- name: download redmine
+- name: download
+  become: yes
   get_url: 
     url: "{{ redmine.url }}/redmine-{{redmine.version}}.zip" 
     dest: "/tmp/redmine-{{ redmine.version }}.zip"
 
-- name: Extract redmine
+- name: Extract
   become: yes
   shell: "unzip /tmp/redmine-{{ redmine.version }}.zip -d {{ common.project_dir }}"
 
-- name: Remove old redmine folder
+- name: Remove old folder
   become: yes
   file:
     state: absent
@@ -19,16 +20,15 @@
 
 - name: Change owner to {{ guest.user }}
   become: yes
-  file: dest={{ common.project_dir }}/redmine owner={{ guest.user }} recurse=yes
-
-- name: Install Bundler
-  become: yes
-  command: bash -lc "gem install bundler"
+  file: 
+    dest: "{{ common.project_dir }}/redmine" 
+    owner: "{{ guest.user }}"
+    recurse: yes
 
 - name: Install mysql2 gem
   gem:
     name: mysql2
-    state: latest
+    state: present
 
 - name: Install dependencies
   community.general.bundler:
@@ -51,6 +51,6 @@
     chdir: "{{ common.project_dir }}/redmine"
 
 - name: Generate default config
-  shell: "bundle exec rake redmine:load_default_data RAILS_ENV=production"
+  shell: "bundle exec rake redmine:load_default_data RAILS_ENV=production REDMINE_LANG=en"
   args:
     chdir: "{{ common.project_dir }}/redmine"
