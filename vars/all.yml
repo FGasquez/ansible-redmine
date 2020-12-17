@@ -1,6 +1,6 @@
 common:
   project_dir: /usr/local/share
-  url: redmine.example.com
+  url: localhost
 
 guest:
   user: vagrant
