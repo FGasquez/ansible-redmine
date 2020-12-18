@@ -1,12 +1,15 @@
 - name: download
   become: yes
-  get_url: 
-    url: "{{ redmine.url }}/redmine-{{redmine.version}}.zip" 
+  get_url:
+    url: "{{ redmine.url }}/redmine-{{ redmine.version }}.zip"
     dest: "/tmp/redmine-{{ redmine.version }}.zip"
 
 - name: Extract
   become: yes
   shell: "unzip /tmp/redmine-{{ redmine.version }}.zip -d {{ common.project_dir }}"
+#  unarchive:
+#    src: "/tmp/redmine-{{ redmine.version }}.zip"
+#    dest: "{{ common.project_dir }}"
 
 - name: Remove old folder
   become: yes
@@ -20,15 +23,10 @@
 
 - name: Change owner to {{ guest.user }}
   become: yes
-  file: 
-    dest: "{{ common.project_dir }}/redmine" 
+  file:
+    dest: "{{ common.project_dir }}/redmine"
     owner: "{{ guest.user }}"
     recurse: yes
-
-- name: Install mysql2 gem
-  gem:
-    name: mysql2
-    state: present
 
 - name: Install dependencies
   community.general.bundler:
@@ -36,9 +34,10 @@
     gemfile: "{{ common.project_dir }}/redmine/Gemfile"
 
 - name: Copy database config
-  template: 
+  template:
     src: database.yml.j2
     dest: "{{ common.project_dir }}/redmine/config/database.yml"
+    mode: 0644
 
 - name: Generate secret token
   shell: "rake generate_secret_token"

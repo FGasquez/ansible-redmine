@@ -24,7 +24,7 @@
       - python-mysqldb
       - ruby-full
       - dirmngr
-      - gnupg 
+      - gnupg
       - apt-transport-https
       - ca-certificates
       - build-essential
@@ -37,6 +37,12 @@
       - nginx
     state: present
 
-- name: Install Bundler
-  become: yes
-  command: bash -lc "gem install bundler"
+- name: Install bundler gem
+  gem:
+    name: bundler
+    state: present
+
+- name: Install mysql2 gem
+  gem:
+    name: mysql2
+    state: present

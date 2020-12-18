@@ -5,15 +5,16 @@
     state: present
 
 - name: Mysql start
-  service: 
+  service:
     name: mysql
-    state: started 
+    state: started
     enabled: yes
 
 - name: Change the authentication plugin of MySQL root user to mysql_native_password
   become: yes
   shell: mysql -u root -e 'UPDATE mysql.user SET plugin="mysql_native_password"
     WHERE user="root" AND host="localhost"'
+
 - name: Flush Privileges
   become: yes
   shell: mysql -u root -e 'FLUSH PRIVILEGES'
@@ -22,33 +23,33 @@
   mysql_user:
     login_host: localhost
     login_user: root
-    login_password:
+    login_password: ""
     name: root
     password: "{{ mysql.root_password }}"
     state: present
 
 - name: Restart mysql service
   become: yes
-  service: 
-    name: mysql 
+  service:
+    name: mysql
     state: restarted
 
 - name: Drop database first
-  mysql_db: 
+  mysql_db:
     name: "{{ mysql.dbname }}"
     login_user: root
     login_password: "{{ mysql.root_password }}"
     state: absent
 
 - name: Create database
-  mysql_db: 
+  mysql_db:
     name: "{{ mysql.dbname }}"
     encoding: utf8
     login_user: root
     login_password: "{{ mysql.root_password }}"
 
 - name: Create user for redmine
-  mysql_user: 
+  mysql_user:
     name: "{{ mysql.user }}"
     password: "{{ mysql.password }}"
     login_user: root
