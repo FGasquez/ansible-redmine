@@ -46,3 +46,9 @@
   gem:
     name: mysql2
     state: present
+
+- name: Install pymsql
+  become: true
+  pip:
+    name: pymysql
+    state: present
