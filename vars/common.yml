@@ -1,0 +1,3 @@
+common:
+  project_dir: /usr/local/share
+  url: localhost

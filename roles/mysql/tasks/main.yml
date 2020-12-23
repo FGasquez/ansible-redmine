@@ -4,14 +4,20 @@
     state: started
     enabled: yes
 
+- name: Verify if root is configured
+  shell: "mysqladmin -uroot -p{{ mysql.root_password }} ping"
+  register: root_status
+
 - name: Change the authentication plugin of MySQL root user to mysql_native_password
   become: yes
   shell: mysql -u root -e 'UPDATE mysql.user SET plugin="mysql_native_password"
     WHERE user="root" AND host="localhost"'
+  when: root_status.stdout|length == 0
 
 - name: Flush Privileges
   become: yes
   shell: mysql -u root -e 'FLUSH PRIVILEGES'
+  when: root_status.stdout|length == 0
 
 - name: Set MySQL root Password
   mysql_user:
@@ -21,19 +27,14 @@
     name: root
     password: "{{ mysql.root_password }}"
     state: present
+  when: root_status.stdout|length == 0
 
 - name: Restart mysql service
   become: yes
   service:
     name: mysql
     state: restarted
-
-- name: Drop database first
-  mysql_db:
-    name: "{{ mysql.dbname }}"
-    login_user: root
-    login_password: "{{ mysql.root_password }}"
-    state: absent
+  when: root_status.stdout|length == 0
 
 - name: Create database
   mysql_db:

@@ -1,0 +1,5 @@
+mysql:
+  root_password: S3cr37P4ssw0rd
+  user: redmine
+  password: Ch4ng3M3
+  dbname: redmine

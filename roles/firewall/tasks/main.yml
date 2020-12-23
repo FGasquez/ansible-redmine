@@ -1,0 +1,20 @@
+
+- name: Allow SSH
+  ufw:
+    rule: allow
+    port: "22"
+    proto: tcp
+  become: true
+
+- name: Allow HTTP
+  ufw:
+    rule: allow
+    port: "80"
+    proto: tcp
+  become: true
+
+- name: Set firewall default policy
+  ufw:
+    state: enabled
+    policy: reject
+  become: true

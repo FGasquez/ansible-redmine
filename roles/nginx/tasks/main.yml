@@ -4,12 +4,6 @@
     name: /etc/nginx/sites-enabled/default
     state: absent
 
-- name: Add {{ guest.user }} to www-data group
-  become: yes
-  user:
-    name: "{{ guest.user }}"
-    groups: www-data
-
 - name: Setup site
   become: yes
   template:

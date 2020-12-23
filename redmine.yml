@@ -1,7 +1,13 @@
 - name: install redmine
   hosts: ubuntu
+  vars_files: 
+    - vars/common.yml
+    - vars/guest.yml
+    - vars/mysql.yml
+    - vars/redmine.yml
   roles:
     - system
     - mysql
     - redmine
     - nginx
+    - firewall

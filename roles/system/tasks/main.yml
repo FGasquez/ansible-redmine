@@ -48,7 +48,25 @@
     state: present
 
 - name: Install pymsql
-  become: true
+  become: yes
   pip:
     name: pymysql
     state: present
+
+- name: "Create group {{ redmine.dir_group }}"
+  group:
+    name: "{{ redmine.dir_group }}"
+    state: present
+
+- name: "Create user {{ redmine.dir_owner }}"
+  become: yes
+  user:
+    name: "{{ redmine.dir_owner }}"
+    group: "{{ redmine.dir_group }}"
+
+- name: Test user
+  shell: whoami
+  register: current_user
+
+- debug:
+    msg: "{{ current_user.stdout }}"
