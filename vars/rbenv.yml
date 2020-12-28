@@ -1,0 +1,8 @@
+rbenv:
+  repo: "https://github.com/rbenv/rbenv.git"
+  root: $HOME/.rbenv
+  version: v1.1.2
+  user: vagrant
+  group: www-data
+  executables_path: "$HOME/.rbenv/shims"
+ 
