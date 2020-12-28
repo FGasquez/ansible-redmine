@@ -1,8 +1,6 @@
 redmine: 
   url: https://www.redmine.org/releases/
   version: 4.1.1
-  dir_owner: www-data
-  dir_group: www-data
 
 email:
   delivery_method: :smtp

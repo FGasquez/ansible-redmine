@@ -1,3 +1,6 @@
 common:
   project_dir: /usr/local/share
   url: localhost
+  dir_owner: www-data
+  dir_group: www-data
+  ruby_version: 2.6.6
