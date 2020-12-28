@@ -67,24 +67,10 @@
     state: absent
 
 - name: "install ruby {{ common.ruby_version }}"
-  shell: "RBENV_ROOT={{ rbenv.root }} rbenv install --skip-existing {{ common.ruby_version }}"
+  shell: "{{ rbenv.root }}/bin/rbenv install --skip-existing {{ common.ruby_version }}"
 
 - name: set global ruby {{ common.ruby_version }}
-  shell: RBENV_ROOT={{ rbenv.root }} rbenv global {{ common.ruby_version }}
+  shell: "{{ rbenv.root }}/bin/rbenv global {{ common.ruby_version }}"
 
 - name: rehash
-  shell: RBENV_ROOT={{ rbenv.root }} rbenv rehash
-
-# - name: set gemrc
-#   copy:
-#     src: files/gemrc
-#     dest: /root/.gemrc
-#     owner: root
-#     group: root
-
-- name: test rbenv
-  shell: "{{ rbenv.executables_path }}/ruby -v"
-  register: ruby_v
-
-- debug:
-    msg: "{{ ruby_v }}"
+  shell: "{{ rbenv.root }}/bin/rbenv rehash"
