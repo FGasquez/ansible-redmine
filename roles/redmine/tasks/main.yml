@@ -27,7 +27,7 @@
   become: yes
   command: "mv {{ common.project_dir }}/redmine-{{ redmine.version }} {{ common.project_dir }}/redmine"
 
-- name: Change owner to {{ guest.user }}
+- name: Change owner to {{ common.user }}
   become: yes
   file:
     dest: "{{ common.project_dir }}/redmine"
@@ -38,6 +38,28 @@
   community.general.bundler:
     state: present
     gemfile: "{{ common.project_dir }}/redmine/Gemfile"
+    executable: "{{ rbenv.executables_path }}/bundler"
+
+- name: Install dependencies
+  community.general.bundler:
+    state: present
+    gemfile: "{{ common.project_dir }}/redmine/Gemfile"
+    executable: "{{ rbenv.executables_path }}/bundler"
+
+- name: Install mysql2 gem
+  community.general.gem:
+    name: mysql2
+    state: latest
+    executable: "{{ rbenv.executables_path }}/gem"
+
+- name: Install passenger gem
+  community.general.gem:
+    name: passenger
+    state: latest
+    executable: "{{ rbenv.executables_path }}/gem"
+
+# - name: Install passenger-install-nginx-module
+#   shell: passenger-install-nginx-module --auto
 
 - name: Copy database config
   template:
@@ -54,25 +76,16 @@
   when: email is defined
 
 - name: Generate secret token
-  shell: "rake generate_secret_token"
+  shell: "{{ rbenv.executables_path }}/rake generate_secret_token"
   args:
     chdir: "{{ common.project_dir }}/redmine"
 
 - name: Migrate Databases
-  shell: "bundle exec rake db:migrate RAILS_ENV=production"
+  shell: "{{ rbenv.executables_path }}/bundle exec rake db:migrate RAILS_ENV=production"
   args:
     chdir: "{{ common.project_dir }}/redmine"
 
 - name: Generate default config
-  shell: "bundle exec rake redmine:load_default_data RAILS_ENV=production REDMINE_LANG=en"
+  shell: "{{ rbenv.executables_path }}/bundle exec rake redmine:load_default_data RAILS_ENV=production REDMINE_LANG=en"
   args:
     chdir: "{{ common.project_dir }}/redmine"
-
-- name: Change owner to {{ guest.user }}
-  become: yes
-  file:
-    dest: "{{ common.project_dir }}/redmine"
-    owner: "{{ redmine.dir_owner }}"
-    group: "{{ redmine.dir_group }}"
-    mode: 0777
-    recurse: yes

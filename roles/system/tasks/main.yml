@@ -1,14 +1,15 @@
-- name: Add an apt key for libnginx-mod-http-passenger
-  become: yes
-  apt_key:
-    keyserver: hkp://keyserver.ubuntu.com:80
-    id: 561F9B9CAC40B2F7
-
-- name: Add libnginx-mod-http-passenger repository
-  become: yes
-  apt_repository:
-    repo: deb https://oss-binaries.phusionpassenger.com/apt/passenger bionic main
-    state: present
+---
+#- name: Add an apt key for libnginx-mod-http-passenger
+#  become: yes
+#  apt_key:
+#    keyserver: hkp://keyserver.ubuntu.com:80
+#    id: 561F9B9CAC40B2F7
+#
+#- name: Add libnginx-mod-http-passenger repository
+#  become: yes
+#  apt_repository:
+#    repo: deb https://oss-binaries.phusionpassenger.com/apt/passenger bionic main
+#    state: present
 
 - name: Update apt
   become: yes
@@ -19,10 +20,10 @@
   become: yes
   apt:
     name:
+      - passenger
       - libssl-dev
       - mysql-server
       - python-mysqldb
-      - ruby-full
       - dirmngr
       - gnupg
       - apt-transport-https
@@ -32,19 +33,20 @@
       - imagemagick
       - libmagickwand-dev
       - libmagickcore-dev
-      - libnginx-mod-http-passenger
       - python3-pip
       - nginx
-    state: present
-
-- name: Install bundler gem
-  gem:
-    name: bundler
-    state: present
-
-- name: Install mysql2 gem
-  gem:
-    name: mysql2
+      - libreadline-dev
+      - autoconf
+      - bison 
+      - libyaml-dev
+      - libreadline6-dev
+      - zlib1g-dev 
+      - libncurses5-dev
+      - libffi-dev
+      - libgdbm5
+      - libgdbm-dev
+      - unzip
+      - libcurl4-openssl-dev
     state: present
 
 - name: Install pymsql
@@ -53,20 +55,3 @@
     name: pymysql
     state: present
 
-- name: "Create group {{ redmine.dir_group }}"
-  group:
-    name: "{{ redmine.dir_group }}"
-    state: present
-
-- name: "Create user {{ redmine.dir_owner }}"
-  become: yes
-  user:
-    name: "{{ redmine.dir_owner }}"
-    group: "{{ redmine.dir_group }}"
-
-- name: Test user
-  shell: whoami
-  register: current_user
-
-- debug:
-    msg: "{{ current_user.stdout }}"
