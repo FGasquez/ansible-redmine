@@ -1,20 +1,24 @@
+## Set the default policy of the INPUT chain to DROP
+# iptables -P INPUT DROP
+#
+## Accept incomming TCP connections from eth0 on port 80 and 443
+# iptables -A INPUT -p tcp --dport 80 -j ACCEPT
+# iptables -A INPUT -p tcp --dport 443 -j ACCEP
+- name: Allow ports
+  become: yes
+  iptables:
+    chain: INPUT
+    protocol: tcp
+    destination_port: "{{ item }}"
+    jump: ACCEPT
+  loop:
+    - 22
+    - 80
+    - 443
 
-- name: Allow SSH
-  ufw:
-    rule: allow
-    port: "22"
-    proto: tcp
-  become: true
 
-- name: Allow HTTP
-  ufw:
-    rule: allow
-    port: "80"
-    proto: tcp
-  become: true
-
-- name: Set firewall default policy
-  ufw:
-    state: enabled
-    policy: reject
-  become: true
+- name: Drop connections rule
+  become: yes
+  iptables:
+    chain: INPUT
+    jump: DROP
