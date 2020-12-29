@@ -1,8 +1,3 @@
-- name: install libnginx-mod-http-passenger
-  become: yes
-  apt:
-    name: libnginx-mod-http-passenger
-
 - name: Disable default site
   become: yes
   file:

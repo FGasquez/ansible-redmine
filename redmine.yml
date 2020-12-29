@@ -1,7 +1,5 @@
 - name: install redmine
   hosts: ubuntu
-  environment:
-    PATH: "$HOME/.rbenv/bin::{{ ansible_env.PATH }}"
   vars_files: 
     - vars/common.yml
     - vars/guest.yml

@@ -1,15 +1,15 @@
 ---
-#- name: Add an apt key for libnginx-mod-http-passenger
-#  become: yes
-#  apt_key:
-#    keyserver: hkp://keyserver.ubuntu.com:80
-#    id: 561F9B9CAC40B2F7
-#
-#- name: Add libnginx-mod-http-passenger repository
-#  become: yes
-#  apt_repository:
-#    repo: deb https://oss-binaries.phusionpassenger.com/apt/passenger bionic main
-#    state: present
+- name: Add an apt key for libnginx-mod-http-passenger
+  become: yes
+  apt_key:
+    keyserver: hkp://keyserver.ubuntu.com:80
+    id: 561F9B9CAC40B2F7
+
+- name: Add libnginx-mod-http-passenger repository
+  become: yes
+  apt_repository:
+    repo: deb https://oss-binaries.phusionpassenger.com/apt/passenger bionic main
+    state: present
 
 - name: Update apt
   become: yes
@@ -20,6 +20,7 @@
   become: yes
   apt:
     name:
+      - libnginx-mod-http-passenger
       - passenger
       - libssl-dev
       - mysql-server

@@ -52,15 +52,6 @@
     state: latest
     executable: "{{ rbenv.executables_path }}/gem"
 
-- name: Install passenger gem
-  community.general.gem:
-    name: passenger
-    state: latest
-    executable: "{{ rbenv.executables_path }}/gem"
-
-# - name: Install passenger-install-nginx-module
-#   shell: passenger-install-nginx-module --auto
-
 - name: Copy database config
   template:
     src: database.yml.j2
